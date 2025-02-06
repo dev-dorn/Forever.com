@@ -1,11 +1,12 @@
 import { useContext, useState, useEffect } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { assets } from '../assets/assets';
-import Title from "../components/title";
+import Title from "../components/Title";
 import ProductItem from "../components/productItem";
+import React from 'react';
 
 const Collection = () => {
-  const { products } = useContext(ShopContext); // Accessing products from ShopContext
+  const { products,search, showSearch } = useContext(ShopContext); // Accessing products from ShopContext
   const [showFilter, setShowFilter] = useState(false); // State for showing/hiding filters
   const [filterProducts, setFilterProducts] = useState([]); // State for filtered products
   const [category, setCategory] = useState([]); // State for selected categories
@@ -33,6 +34,12 @@ const Collection = () => {
   // Function to apply filters based on selected categories and subcategories
   const applyFilter = () => {
     let productsCopy = products.slice();
+    if (showSearch && search) { // Check if both 'showSearch' and 'search' are truthy
+      productsCopy = productsCopy.filter(item => // Filter the productsCopy array
+          item.name.toLowerCase().includes(search.toLowerCase()) // Convert both item name and search query to lowercase and check if item name includes the search query
+      );
+  }
+  
 
     if (category.length > 0) {
       productsCopy = productsCopy.filter(item => category.includes(item.category));
@@ -64,7 +71,7 @@ const Collection = () => {
 
   useEffect(() => {
     applyFilter(); // Apply filters whenever category or subCategory changes
-  }, [category, subCategory]);
+  }, [category, subCategory, search, showSearch]);
 
   useEffect(() => {
     sortProduct(); // Sort products whenever sortType changes
