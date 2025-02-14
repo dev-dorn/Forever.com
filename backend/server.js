@@ -6,6 +6,7 @@ import cors from 'cors';
 import connectDB from './config/mongodb.js';
 import connectCloudinary from './config/cloudinary.js';
 import userRouter from './routes/userRoutes.js';
+import productRouter from './routes/productRoute.js';
 
 // Debugging: Print MONGODB_URI to check if it's loaded
 console.log('MONGODB_URI:', process.env.MONGODB_URI); // 🔍 Should print your MongoDB URI
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use('/api/user',userRouter)
+app.use('api/product', productRouter)
 
 app.get('/', (req, res) => {
     res.send('API working');
